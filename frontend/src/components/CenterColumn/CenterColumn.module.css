@@ -1,0 +1,77 @@
+.centerColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.pomodoroSection {
+    text-align: center;
+    padding: 30px;
+}
+
+.timerTask {
+    color: #4a5568;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.timerDisplay {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    position: relative;
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+}
+
+.timerStatus {
+    color: #718096;
+    margin-bottom: 20px;
+}
+
+.timerControls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.timerBtn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.timerBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.taskList {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    .timerDisplay {
+        width: 150px;
+        height: 150px;
+        font-size: 2rem;
+    }
+}

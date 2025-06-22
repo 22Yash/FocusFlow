@@ -1,0 +1,58 @@
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 20px;
+  background: linear-gradient(to top right, #ffffff, #f0f8ff);
+  border-radius: 16px;
+}
+
+/* Quadrant Styles */
+.quadrant {
+  border-radius: 16px;
+  padding: 20px;
+  color: #ffffff;
+  min-height: 200px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.red {
+  background-color: #ff6b6b; /* DO quadrant */
+  border: 2px dashed #ffb3b3;
+}
+
+.teal {
+  background-color: #4ecdc4; /* SCHEDULE quadrant */
+  border: 2px dashed #a0f0e8;
+}
+
+.yellow {
+  background-color: #ffe066; /* DELEGATE quadrant */
+  border: 2px dashed #fff4b3;
+  color: #333;
+}
+
+.green {
+  background-color: #b8f2e6; /* ELIMINATE quadrant */
+  border: 2px dashed #d1faf0;
+  color: #333;
+}
+
+/* Headers */
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Task Card */
+.task-card {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin: 8px 0;
+  font-weight: 500;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: inherit;
+}

@@ -1,0 +1,346 @@
+/* FocusSession.css */
+
+/* Reset and body */
+/*  */
+  
+  /* Container */
+  .focus-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    
+ 
+    margin-top: 20px;
+    text-align: center;
+    
+    
+  }
+  
+  /* Header */
+  .header {
+    margin-bottom: 40px;
+  }
+  
+  .header h1 {
+    color: #2d3748;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  
+  .header p {
+    color: #718096;
+    font-size: 1.1rem;
+  }
+  
+  /* Form */
+  .form-section {
+    margin-bottom: 30px;
+    text-align: left;
+  }
+  
+  .form-group {
+    margin-bottom: 24px;
+  }
+  
+  .form-group label {
+    display: block;
+    color: #4a5568;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+  
+  /* Session type */
+  .session-type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+  
+  .session-type-card {
+    padding: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    text-align: center;
+  }
+  
+  .session-type-card:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .session-type-card.selected {
+    border-color: #667eea;
+    background: #f7fafc;
+  }
+  
+  .session-type-card .icon {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+  
+  .session-type-card .title {
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 4px;
+  }
+  
+  .session-type-card .duration {
+    font-size: 0.85rem;
+    color: #718096;
+  }
+  
+  /* Duration */
+  .duration-selector {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .duration-btn {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+  
+  .duration-btn:hover {
+    border-color: #667eea;
+  }
+  
+  .duration-btn.selected {
+    border-color: #667eea;
+    background: #f7fafc;
+    color: #667eea;
+  }
+  
+  /* Mood */
+  .mood-rating {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  
+  .mood-item {
+    text-align: center;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    flex: 1;
+    margin: 0 4px;
+  }
+  
+  .mood-item:hover {
+    background: #f7fafc;
+  }
+  
+  .mood-item.selected {
+    background: #667eea;
+    color: white;
+  }
+  
+  .mood-emoji {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 4px;
+  }
+  
+  .mood-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  /* Environment */
+  .environment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+  
+  .environment-card {
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    text-align: center;
+  }
+  
+  .environment-card:hover {
+    border-color: #667eea;
+    transform: translateY(-1px);
+  }
+  
+  .environment-card.selected {
+    border-color: #667eea;
+    background: #f7fafc;
+  }
+  
+  .environment-icon {
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+  }
+  
+  .environment-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #2d3748;
+  }
+  
+  /* Button */
+  .start-button {
+    width: 100%;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .start-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  }
+  
+  .start-button:active {
+    transform: translateY(0);
+  }
+  
+  /* Stats */
+  .stats-bar {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #667eea;
+    display: block;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: #718096;
+    margin-top: 4px;
+  }
+  
+  @media (max-width: 480px) {
+    .focus-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 40px;
+        margin: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 380px;
+        width: 100%;
+        text-align: center;
+    }
+  
+    .header h1 {
+      font-size: 2rem;
+    }
+  
+    .session-type-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .environment-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+
+  /* @media (min-width: 768px) {
+    .focus-container {
+      max-width: 900px;
+      padding: 48px 64px;
+      text-align: left;
+    }
+  
+    .header {
+      text-align: left;
+    }
+  
+    .header h1 {
+      font-size: 3rem;
+    }
+  
+    .form-section {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+  
+    .form-group {
+      flex: 1;
+    }
+  
+    .duration-selector,
+    .mood-rating,
+    .environment-grid {
+      justify-content: flex-start;
+    }
+  } */
+  
+  @media (min-width: 1024px) {
+    .focus-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+       margin-left: 280px;
+        width: 900px;
+        text-align: center;
+        margin-top: 20px;
+        
+        
+      }
+    
+  }
+  
