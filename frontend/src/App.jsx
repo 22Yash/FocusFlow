@@ -9,6 +9,7 @@ import RedirectToOnboarding from './components/RedirectToOnboarding';
 import TaskPlannig from './Pages/TaskPlannig';
 import FocusSession from './components/Focus Session/FocusSession';
 import SessionStart from './components/Focus Session/SessionStart';
+import AnalyticsDashboard from './Pages/AnalyticsDashboard';
 
 function App() {
   const { isSignedIn, isLoaded } = useUser();
@@ -36,6 +37,7 @@ function App() {
         <Route path='/focussession' element={<FocusSession/>}/>
         <Route path='/taskplanning' element={<TaskPlannig/>}/>
         <Route path='/sessionstart' element={<SessionStart/>}/>
+        <Route path='/analytics' element={<AnalyticsDashboard/>}/>
       </Routes>
     </div>
   )

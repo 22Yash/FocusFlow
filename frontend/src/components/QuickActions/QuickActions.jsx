@@ -11,10 +11,10 @@ const QuickActions = () => {
       
         
       
-      <a href="#" className={styles.actionBtn}>
+      <Link to='/analytics' className={styles.actionBtn}>
         <span className={styles.actionIcon}>📈</span>
         <span className={styles.actionText}>Analytics</span>
-      </a>
+      </Link>
       <a href="#" className={styles.actionBtn}>
         <span className={styles.actionIcon}>🎯</span>
         <span className={styles.actionText}>Habit Tracker</span>
