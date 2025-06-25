@@ -1,45 +1,61 @@
-import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart } from 'recharts';
-import { TrendingUp, Calendar, Clock, Target, Award, Activity, Filter, Download, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart
+} from 'recharts';
+import {
+  TrendingUp, Calendar, Clock, Target, Award, Activity,
+  Filter, Download, ChevronDown
+} from 'lucide-react';
+import { useUser } from '@clerk/clerk-react';
 import Header from '../components/Header/Header';
 
 const AnalyticsDashboard = () => {
+  const { user } = useUser();
   const [timeRange, setTimeRange] = useState('7d');
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Mock data for charts
-  const focusTimeData = [
-    { day: 'Mon', hours: 2.5, sessions: 3 },
-    { day: 'Tue', hours: 4.2, sessions: 5 },
-    { day: 'Wed', hours: 3.8, sessions: 4 },
-    { day: 'Thu', hours: 5.1, sessions: 6 },
-    { day: 'Fri', hours: 3.2, sessions: 4 },
-    { day: 'Sat', hours: 6.5, sessions: 7 },
-    { day: 'Sun', hours: 4.8, sessions: 5 }
-  ];
+  // State for API data
+  const [focusTimeData, setFocusTimeData] = useState([]);
+  const [taskDistribution, setTaskDistribution] = useState([]);
+  const [weeklyProgress, setWeeklyProgress] = useState([]);
+  const [productivityScore, setProductivityScore] = useState(0);
+  const [totalFocusHours, setTotalFocusHours] = useState(0);
+  const [completedTasks, setCompletedTasks] = useState(0);
+  const [currentStreak, setCurrentStreak] = useState(0);
 
-  const taskDistribution = [
-    { name: 'Work', value: 45, color: '#8B5CF6' },
-    { name: 'Personal', value: 25, color: '#06B6D4' },
-    { name: 'Learning', value: 20, color: '#10B981' },
-    { name: 'Health', value: 10, color: '#F59E0B' }
-  ];
+  useEffect(() => {
+    if (!user) return;
 
-  const weeklyProgress = [
-    { week: 'Week 1', focus: 18, tasks: 12, streak: 5 },
-    { week: 'Week 2', focus: 22, tasks: 15, streak: 7 },
-    { week: 'Week 3', focus: 26, tasks: 18, streak: 6 },
-    { week: 'Week 4', focus: 31, tasks: 22, streak: 7 }
-  ];
+    const fetchAnalytics = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/analytics', {
+          params: {
+            userId: user.id,
+            range: timeRange
+          }
+        });
 
-  const productivityScore = 87;
-  const totalFocusHours = 156;
-  const completedTasks = 89;
-  const currentStreak = 12;
+        const data = res.data;
+
+        setFocusTimeData(data.focusTimeTrend);
+        setTaskDistribution(data.taskCategories);
+        setWeeklyProgress(data.weeklyStats);
+        setProductivityScore(data.productivityScore);
+        setTotalFocusHours(data.totalFocusHours);
+        setCompletedTasks(data.completedTasks);
+        setCurrentStreak(data.currentStreak);
+      } catch (err) {
+        console.error('Failed to fetch analytics:', err);
+      }
+    };
+
+    fetchAnalytics();
+  }, [user, timeRange]);
 
   const StatCard = ({ icon: Icon, title, value, change, trend, color = "blue" }) => (
     <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        
       <div className="flex items-center justify-between mb-4">
         <div className={`w-12 h-12 bg-${color}-100 rounded-2xl flex items-center justify-center`}>
           <Icon className={`w-6 h-6 text-${color}-600`} />
@@ -57,19 +73,18 @@ const AnalyticsDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-      <Header/>
-        
-        {/* Header */}
+        <Header />
+
+        {/* Header Section */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Analytics</h1>
             <p className="text-gray-600">Track your productivity insights and trends</p>
           </div>
-          
           <div className="flex items-center space-x-4">
             <div className="relative">
-              <select 
-                value={timeRange} 
+              <select
+                value={timeRange}
                 onChange={(e) => setTimeRange(e.target.value)}
                 className="appearance-none bg-white border border-gray-200 rounded-xl px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
@@ -80,7 +95,6 @@ const AnalyticsDashboard = () => {
               </select>
               <ChevronDown className="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
             </div>
-            
             <button className="flex items-center px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors">
               <Download className="w-4 h-4 mr-2" />
               Export
@@ -88,9 +102,9 @@ const AnalyticsDashboard = () => {
           </div>
         </div>
 
-        {/* Key Metrics */}
+        {/* Stat Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard 
+          <StatCard
             icon={Target}
             title="Productivity Score"
             value={`${productivityScore}%`}
@@ -98,7 +112,7 @@ const AnalyticsDashboard = () => {
             trend="up"
             color="purple"
           />
-          <StatCard 
+          <StatCard
             icon={Clock}
             title="Total Focus Time"
             value={`${totalFocusHours}h`}
@@ -106,7 +120,7 @@ const AnalyticsDashboard = () => {
             trend="up"
             color="blue"
           />
-          <StatCard 
+          <StatCard
             icon={Activity}
             title="Tasks Completed"
             value={completedTasks}
@@ -114,7 +128,7 @@ const AnalyticsDashboard = () => {
             trend="up"
             color="green"
           />
-          <StatCard 
+          <StatCard
             icon={Award}
             title="Current Streak"
             value={`${currentStreak} days`}
@@ -124,7 +138,7 @@ const AnalyticsDashboard = () => {
           />
         </div>
 
-        {/* Navigation Tabs */}
+        {/* Tabs */}
         <div className="bg-white rounded-2xl p-1 mb-8 shadow-sm border border-gray-100">
           <div className="flex space-x-1">
             {['overview', 'focus', 'tasks', 'habits'].map((tab) => (
@@ -132,8 +146,8 @@ const AnalyticsDashboard = () => {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-6 py-3 rounded-xl font-medium text-sm transition-all ${
-                  activeTab === tab 
-                    ? 'bg-purple-100 text-purple-700' 
+                  activeTab === tab
+                    ? 'bg-purple-100 text-purple-700'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
@@ -143,10 +157,8 @@ const AnalyticsDashboard = () => {
           </div>
         </div>
 
-        {/* Charts Grid */}
+        {/* Area Chart */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          
-          {/* Focus Time Trend */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-gray-900">Daily Focus Time</h3>
@@ -158,122 +170,78 @@ const AnalyticsDashboard = () => {
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={focusTimeData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="day" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'white', 
-                    border: '1px solid #e5e7eb', 
-                    borderRadius: '12px',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                  }}
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="hours" 
-                  stroke="#8B5CF6" 
+                <XAxis dataKey="day" />
+                <YAxis />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="hours"
+                  stroke="#8B5CF6"
+                  fillOpacity={1}
                   fill="url(#colorFocus)"
                   strokeWidth={3}
                 />
                 <defs>
                   <linearGradient id="colorFocus" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
               </AreaChart>
             </ResponsiveContainer>
           </div>
 
-          {/* Task Distribution */}
+          {/* Pie Chart */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <h3 className="text-lg font-semibold text-gray-900 mb-6">Task Categories</h3>
-            <div className="flex items-center justify-center">
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={taskDistribution}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={120}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {taskDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={taskDistribution}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={120}
+                  paddingAngle={5}
+                  dataKey="value"
+                >
+                  {taskDistribution.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color || '#ccc'} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
             <div className="flex flex-wrap justify-center gap-4 mt-4">
               {taskDistribution.map((item, index) => (
                 <div key={index} className="flex items-center">
-                  <div 
-                    className="w-3 h-3 rounded-full mr-2" 
-                    style={{ backgroundColor: item.color }}
+                  <div
+                    className="w-3 h-3 rounded-full mr-2"
+                    style={{ backgroundColor: item.color || '#ccc' }}
                   ></div>
-                  <span className="text-sm text-gray-600">{item.name} ({item.value}%)</span>
+                  <span className="text-sm text-gray-600">
+                    {item.name} ({item.value}%)
+                  </span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Weekly Progress */}
+        {/* Weekly Progress Bar Chart */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
           <h3 className="text-lg font-semibold text-gray-900 mb-6">Weekly Progress</h3>
           <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={weeklyProgress} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+            <BarChart data={weeklyProgress}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="week" axisLine={false} tickLine={false} />
-              <YAxis axisLine={false} tickLine={false} />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: '1px solid #e5e7eb', 
-                  borderRadius: '12px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }}
-              />
+              <XAxis dataKey="week" />
+              <YAxis />
+              <Tooltip />
               <Bar dataKey="focus" fill="#8B5CF6" radius={[4, 4, 0, 0]} />
               <Bar dataKey="tasks" fill="#06B6D4" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
-
-        {/* Insights Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white">
-            <div className="flex items-center mb-4">
-              <TrendingUp className="w-8 h-8 mr-3" />
-              <h3 className="text-lg font-semibold">Peak Performance</h3>
-            </div>
-            <p className="text-purple-100 mb-3">Your most productive day this week was Thursday with 5.1 hours of focused work.</p>
-            <div className="text-2xl font-bold">Thursday</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
-            <div className="flex items-center mb-4">
-              <Clock className="w-8 h-8 mr-3" />
-              <h3 className="text-lg font-semibold">Best Time</h3>
-            </div>
-            <p className="text-blue-100 mb-3">You're most focused between 9 AM - 11 AM. Consider scheduling important tasks during this time.</p>
-            <div className="text-2xl font-bold">9-11 AM</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white">
-            <div className="flex items-center mb-4">
-              <Award className="w-8 h-8 mr-3" />
-              <h3 className="text-lg font-semibold">Achievement</h3>
-            </div>
-            <p className="text-green-100 mb-3">You've maintained a 12-day streak! Keep up the momentum to reach your monthly goal.</p>
-            <div className="text-2xl font-bold">12 Days</div>
-          </div>
-        </div>
-
       </div>
     </div>
   );

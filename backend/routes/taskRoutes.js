@@ -57,19 +57,15 @@ router.delete("/:id", async (req, res) => {
 
 
 // PUT update a task's quadrant
+// PUT update a task (partial or full)
 router.put("/:id", async (req, res) => {
   try {
-    const { quadrant } = req.body;
     const { id } = req.params;
-    
-    if (!quadrant) {
-      return res.status(400).json({ message: 'Quadrant is required' });
-    }
 
-    const updatedTask = await Task.findOneAndUpdate(
-      { _id: id }, 
-      { quadrant },
-      { new: true }
+    const updatedTask = await Task.findByIdAndUpdate(
+      id,
+      { $set: req.body }, // Accept any fields
+      { new: true, runValidators: true }
     );
 
     if (!updatedTask) {
