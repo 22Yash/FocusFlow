@@ -20,14 +20,26 @@ router.get("/", async (req, res) => {
 
 // POST a new task
 router.post("/", async (req, res) => {
-  const { description, quadrant, userID } = req.body;
+  const { description, quadrant, userID , category ,priority ,estimatedTime ,dueDate ,tags } = req.body;
 
-  if (!description || !quadrant || !userID) {
+  if (!description || !quadrant || !userID ) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
+  // Apply default values if any advanced fields are missing
+  const taskData = {
+    description,
+    quadrant,
+    userID,
+    category: category || "Work",
+    priority: priority || "Medium",
+    estimatedTime: estimatedTime || 60,
+    dueDate: dueDate || null,
+    tags: Array.isArray(tags) ? tags : []
+  };
+
   try {
-    const newTask = new Task({ description, quadrant, userID });
+    const newTask = new Task(taskData);
     const saved = await newTask.save();
     res.status(201).json(saved);
   } catch (err) {
