@@ -1,63 +1,53 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const TaskSchema = new mongoose.Schema({
-  description: { type: String, required: true },
-
+const taskSchema = new mongoose.Schema({
+  description: {
+    type: String,
+    required: true
+  },
   quadrant: {
     type: String,
-    enum: ["do", "schedule", "delegate", "eliminate"],
     required: true,
+    enum: ['DO', 'SCHEDULE', 'DELEGATE', 'DELETE']
   },
-
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-
   userID: {
     type: String,
-    required: true,
+    required: true
   },
-
   category: {
     type: String,
-    enum: ["Work", "Personal", "Learning", "Health", "Finance"],
-    default: "Work",
+    default: 'Work'
   },
-
   priority: {
     type: String,
-    enum: ["High", "Medium", "Low"],
-    default: "Medium",
+    default: 'Medium',
+    enum: ['Low', 'Medium', 'High']
   },
-
   estimatedTime: {
     type: Number,
-    default: 60, // in minutes
+    default: 60 // in minutes
   },
-
   dueDate: {
     type: Date,
+    default: null
   },
-
-  tags: {
-    type: [String],
-    default: [],
-  },
-
+  tags: [{
+    type: String
+  }],
   completed: {
     type: Boolean,
-    default: false,
+    default: false
   },
-
   completedAt: {
     type: Date,
-  },
-
-  timeSpent: {
-    type: Number, // in minutes
-    default: 0,
-  },
+    default: null
+  }
+}, {
+  timestamps: true // This adds createdAt and updatedAt automatically
 });
 
-module.exports = mongoose.model("Task", TaskSchema);
+// Index for better query performance
+taskSchema.index({ userID: 1, completed: 1 });
+taskSchema.index({ userID: 1, createdAt: -1 });
+
+module.exports = mongoose.model('Task', taskSchema);

@@ -23,7 +23,7 @@ const CenterColumn = () => {
       </Card>
 
       {/* Today's Tasks */}
-      <Card 
+      {/* <Card 
         title="📋 Today's Tasks" 
         action="+ Add Task" 
         headerBg="linear-gradient(135deg, #667eea, #764ba2)"
@@ -54,7 +54,7 @@ const CenterColumn = () => {
             checked={false}
           />
         </div>
-      </Card>
+      </Card> */}
     </div>
   );
 };

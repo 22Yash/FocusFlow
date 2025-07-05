@@ -7,8 +7,9 @@ const DashboardGrid = () => {
   return (
     <div className={styles.dashboardGrid}>
       <LeftColumn />
-      <CenterColumn />
       <RightColumn />
+      <CenterColumn />
+      
     </div>
   );
 };

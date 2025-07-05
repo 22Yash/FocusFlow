@@ -33,7 +33,7 @@
     z-index: 1000;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    height: 120px;
+    height: 100px;
     margin: 20px;    
     border-radius: 30px;
     transition: all 0.3s ease;
