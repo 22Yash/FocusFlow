@@ -98,14 +98,15 @@
         text-align: center;
         gap: 15px;
         color: white;
+        margin-top: 0px;
     }
 
     .welcomeText h1 {
-        font-size: 1rem;
+        font-size: .9rem;
         font-weight: 700;
         width: 150px;
-        background-color: #68d391;
-        margin-bottom: 5px;
+        margin-left: -20px;
+        margin-bottom: -20px;
     
     }
 
@@ -118,22 +119,22 @@
     }
 
     .logo {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
         background: white;
         border-radius: 15px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
-        margin-top: -50px;
+        margin-top: -30px;
     }
 
     .welcomeText p {
         opacity: 0.8;
-        font-size: 1rem;
+        font-size: .9rem;
         width: 300px;
-        margin-top: 14px;
+        margin-top: 30px;
         margin-left: -100px;
     }
 

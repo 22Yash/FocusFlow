@@ -74,7 +74,7 @@ const LandingPage = () => {
       </header>
 
       <section className="hero">
-        <div className="hero-content">
+        <div className="hero-content mt-[20px]">
           <h1>Transform Your Productivity with AI</h1>
           <p className="hero-subtitle">Stop getting distracted. Start achieving your goals with intelligent focus management.</p>
 
