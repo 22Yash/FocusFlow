@@ -1,7 +1,7 @@
 import styles from './CenterColumn.module.css';
 import Card from '../shared/Card';
 import TaskItem from '../shared/TaskItem';
-
+import { Link } from 'react-router-dom';
 const CenterColumn = () => {
   return (
     <div className={styles.centerColumn}>
@@ -16,7 +16,9 @@ const CenterColumn = () => {
           <div className={styles.timerDisplay}>25:00</div>
           <div className={styles.timerStatus}>Ready to start • Session 1 of 4</div>
           <div className={styles.timerControls}>
-            <button className={styles.timerBtn}>▶️ Start Focus</button>
+            <button className={styles.timerBtn}>▶️ 
+              <Link to='/focussession'>Start Focus</Link>
+              </button>
             <button className={styles.timerBtn}>⏭️ Skip Break</button>
           </div>
         </div>

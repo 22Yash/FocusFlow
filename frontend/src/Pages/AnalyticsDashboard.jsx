@@ -11,6 +11,7 @@ import {
 import { useUser } from '@clerk/clerk-react';
 import Header from '../components/Header/Header';
 
+
 const AnalyticsDashboard = () => {
   const { user } = useUser();
   const [timeRange, setTimeRange] = useState('7d');
@@ -71,17 +72,17 @@ const AnalyticsDashboard = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-[#667eea] to-[#764ba2] p-6">
       <div className="max-w-7xl mx-auto">
         <Header />
 
         {/* Header Section */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 mt-[20px]">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Analytics</h1>
             <p className="text-gray-600">Track your productivity insights and trends</p>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center flex-col md:flex-row gap-[10px] space-x-4">
             <div className="relative">
               <select
                 value={timeRange}

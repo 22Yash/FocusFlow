@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Clock, Calendar, Tag, Plus, X, Trash2, Play, Check } from 'lucide-react';
@@ -11,10 +11,10 @@ function EisenhowerMatrix() {
   const [task, setTask] = useState("");
   const [quadrant, setQuadrant] = useState("");
   const [tasksByQuadrant, setTasksByQuadrant] = useState({
-    do: [],
-    schedule: [],
-    delegate: [],
-    eliminate: [],
+    DO: [],
+    SCHEDULE: [],
+    DELEGATE: [],
+    DELETE: [],
   });
 
   const [showAdvancedForm, setShowAdvancedForm] = useState(false);
@@ -34,28 +34,28 @@ function EisenhowerMatrix() {
   const userID = user?.id;
 
   const quadrantColors = {
-    do: {
+    DO: {
       border: "border-red-500",
       bg: "bg-red-50",
       text: "text-red-800",
       hover: "hover:bg-red-100",
       accent: "bg-red-500"
     },
-    schedule: {
+    SCHEDULE: {
       border: "border-blue-500",
       bg: "bg-blue-50",
       text: "text-blue-800",
       hover: "hover:bg-blue-100",
       accent: "bg-blue-500"
     },
-    delegate: {
+    DELEGATE: {
       border: "border-yellow-500",
       bg: "bg-yellow-50",
       text: "text-yellow-800",
       hover: "hover:bg-yellow-100",
       accent: "bg-yellow-500"
     },
-    eliminate: {
+    DELETE: {
       border: "border-gray-500",
       bg: "bg-gray-50",
       text: "text-gray-800",
@@ -77,10 +77,10 @@ function EisenhowerMatrix() {
         });
         const tasks = res.data;
         const grouped = {
-          do: [],
-          schedule: [],
-          delegate: [],
-          eliminate: [],
+          DO: [],
+          SCHEDULE: [],
+          DELEGATE: [],
+          DELETE: [],
         };
         
         tasks.forEach((t) => {
@@ -95,7 +95,8 @@ function EisenhowerMatrix() {
             dueDate: t.dueDate,
             tags: t.tags || [],
             completed: t.completed || false,
-            timeSpent: t.timeSpent || 0
+            timeSpent: t.timeSpent || 0,
+            completedAt: t.completedAt
           });
         });
         
@@ -141,7 +142,8 @@ function EisenhowerMatrix() {
           dueDate: newTask.dueDate,
           tags: newTask.tags,
           completed: false,
-          timeSpent: 0
+          timeSpent: 0,
+          completedAt: newTask.completedAt
         }],
       }));
 
@@ -165,28 +167,27 @@ function EisenhowerMatrix() {
   };
 
   const handleStartTask = (taskDescription, focusMinutes) => {
-  navigate("/sessionstart", {
-    state: {
-      task: taskDescription,
-      time: focusMinutes,  // or a default like 25
-    },
-  });
-};
+    navigate("/sessionstart", {
+      state: {
+        task: taskDescription,
+        time: focusMinutes,
+      },
+    });
+  };
 
   const completeTask = async (quadrant, taskId) => {
     const task = tasksByQuadrant[quadrant]?.find(t => t.id === taskId);
     if (!task) return;
     
     try {
-      await axios.put(`http://localhost:5000/api/tasks/${taskId}`, { 
-        completed: true,
-        completedAt: new Date().toISOString()
+      await axios.put(`http://localhost:5000/api/tasks/${taskId}/complete`, { 
+        completed: true
       });
 
       setTasksByQuadrant(prev => ({
         ...prev,
         [quadrant]: prev[quadrant].map(t => 
-          t.id === taskId ? { ...t, completed: true } : t
+          t.id === taskId ? { ...t, completed: true, completedAt: new Date().toISOString() } : t
         )
       }));
     } catch (error) {
@@ -296,10 +297,10 @@ function EisenhowerMatrix() {
                 className="p-3 rounded-xl border border-gray-300"
               >
                 <option value="">Select Quadrant</option>
-                <option value="do">🔥 Do (Urgent & Important)</option>
-                <option value="schedule">📅 Schedule (Not Urgent & Important)</option>
-                <option value="delegate">👥 Delegate (Urgent & Not Important)</option>
-                <option value="eliminate">🗑️ Eliminate (Not Urgent & Not Important)</option>
+                <option value="DO">🔥 Do (Urgent & Important)</option>
+                <option value="SCHEDULE">📅 Schedule (Not Urgent & Important)</option>
+                <option value="DELEGATE">👥 Delegate (Urgent & Not Important)</option>
+                <option value="DELETE">🗑️ Delete (Not Urgent & Not Important)</option>
               </select>
             </div>
 
@@ -396,10 +397,10 @@ function EisenhowerMatrix() {
               className="flex-1 p-3 rounded-xl border border-gray-300"
             >
               <option value="">Select Quadrant</option>
-              <option value="do">🔥 Do (Urgent & Important)</option>
-              <option value="schedule">📅 Schedule (Not Urgent & Important)</option>
-              <option value="delegate">👥 Delegate (Urgent & Not Important)</option>
-              <option value="eliminate">🗑️ Eliminate (Not Urgent & Not Important)</option>
+              <option value="DO">🔥 Do (Urgent & Important)</option>
+              <option value="SCHEDULE">📅 Schedule (Not Urgent & Important)</option>
+              <option value="DELEGATE">👥 Delegate (Urgent & Not Important)</option>
+              <option value="DELETE">🗑️ Delete (Not Urgent & Not Important)</option>
             </select>
           </div>
         )}
@@ -420,10 +421,10 @@ function EisenhowerMatrix() {
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
           {[
-            { key: "do", title: "🔥 DO", desc: "Urgent & Important" },
-            { key: "schedule", title: "📅 SCHEDULE", desc: "Important but Not Urgent" },
-            { key: "delegate", title: "👥 DELEGATE", desc: "Urgent but Not Important" },
-            { key: "eliminate", title: "🗑️ ELIMINATE", desc: "Not Urgent or Important" },
+            { key: "DO", title: "🔥 DO", desc: "Urgent & Important" },
+            { key: "SCHEDULE", title: "📅 SCHEDULE", desc: "Important but Not Urgent" },
+            { key: "DELEGATE", title: "👥 DELEGATE", desc: "Urgent but Not Important" },
+            { key: "DELETE", title: "🗑️ DELETE", desc: "Not Urgent or Important" },
           ].map(({ key, title, desc }) => (
             <Droppable key={key} droppableId={key}>
               {(provided, snapshot) => (
@@ -473,14 +474,20 @@ function EisenhowerMatrix() {
                                     ))}
                                   </div>
                                 )}
+                                {task.completedAt && (
+                                  <div className="text-xs opacity-70 mt-1">
+                                    Completed: {new Date(task.completedAt).toLocaleDateString()}
+                                  </div>
+                                )}
                               </div>
                               
                               <div className="flex flex-col gap-1 ml-2">
                                 {!task.completed && (
                                   <>
                                     <button
-                                      onClick={() => handleStartTask(task.description, 25)}
+                                      onClick={() => handleStartTask(task.content, task.estimatedTime)}
                                       className="p-1 rounded hover:bg-white/50 transition-colors"
+                                      title="Start Task"
                                     >
                                       <Play size={14} />
                                     </button>
@@ -490,6 +497,7 @@ function EisenhowerMatrix() {
                                         completeTask(key, task.id);
                                       }}
                                       className="p-1 rounded hover:bg-white/50 transition-colors text-green-600"
+                                      title="Complete Task"
                                     >
                                       <Check size={14} />
                                     </button>
@@ -501,6 +509,7 @@ function EisenhowerMatrix() {
                                     deleteTask(key, task.id);
                                   }}
                                   className="p-1 rounded hover:bg-white/50 transition-colors text-red-600"
+                                  title="Delete Task"
                                 >
                                   <Trash2 size={14} />
                                 </button>
@@ -511,6 +520,13 @@ function EisenhowerMatrix() {
                               <div className="text-xs opacity-70 mt-1 flex items-center gap-1">
                                 <Calendar size={12} />
                                 Due: {new Date(task.dueDate).toLocaleDateString()}
+                              </div>
+                            )}
+                            
+                            {task.estimatedTime && (
+                              <div className="text-xs opacity-70 mt-1 flex items-center gap-1">
+                                <Clock size={12} />
+                                Est. {task.estimatedTime}min
                               </div>
                             )}
                           </div>

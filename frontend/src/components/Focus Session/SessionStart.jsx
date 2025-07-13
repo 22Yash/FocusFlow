@@ -34,7 +34,7 @@ function SessionStart() {
 
   useEffect(() => {
     if (!sessionId) {
-      navigate('/focus-session');
+      navigate('/focussession');
       return;
     }
     
